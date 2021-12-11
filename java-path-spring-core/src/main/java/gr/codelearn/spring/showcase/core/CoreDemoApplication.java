@@ -7,7 +7,7 @@ import gr.codelearn.spring.showcase.core.service.TravelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class CoreDemoApplication {
 
@@ -18,7 +18,7 @@ public class CoreDemoApplication {
 		logger.info("Starting program execution");
 
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+		ApplicationContext context = new AnnotationConfigApplicationContext("gr.codelearn.spring.showcase.core");
 
 		Vehicle vehicle = context.getBean("car", Car.class);
 		TravelService myTravel = new TravelService(vehicle);
@@ -27,7 +27,6 @@ public class CoreDemoApplication {
 		vehicle = context.getBean("bike", Bike.class);
 		TravelService anotherTravel = new TravelService(vehicle);
 		anotherTravel.startJourney();
-
 
 	}
 }
