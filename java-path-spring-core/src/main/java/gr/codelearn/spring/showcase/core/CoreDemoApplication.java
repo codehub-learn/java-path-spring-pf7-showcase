@@ -2,9 +2,12 @@ package gr.codelearn.spring.showcase.core;
 
 import gr.codelearn.spring.showcase.core.domain.Bike;
 import gr.codelearn.spring.showcase.core.domain.Car;
+import gr.codelearn.spring.showcase.core.domain.Vehicle;
 import gr.codelearn.spring.showcase.core.service.TravelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CoreDemoApplication {
 
@@ -14,10 +17,17 @@ public class CoreDemoApplication {
 	public static void main(String[] args) {
 		logger.info("Starting program execution");
 
-		TravelService myTravel = new TravelService(new Car());
+
+		ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+
+		Vehicle vehicle = context.getBean("car", Car.class);
+		TravelService myTravel = new TravelService(vehicle);
 		myTravel.startJourney();
 
-		TravelService anotherTravel = new TravelService(new Bike());
+		vehicle = context.getBean("bike", Bike.class);
+		TravelService anotherTravel = new TravelService(vehicle);
 		anotherTravel.startJourney();
+
+
 	}
 }
