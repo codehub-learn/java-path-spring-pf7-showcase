@@ -1,5 +1,7 @@
 package gr.codelearn.spring.showcase.core.bootstrap;
 
+import gr.codelearn.spring.showcase.core.config.MappedConfigurationProperties;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,9 +13,12 @@ import org.springframework.stereotype.Component;
  * application initialization.
  */
 @Component
+@RequiredArgsConstructor
 public class SampleRunner implements CommandLineRunner {
 
 	private final Logger logger = LoggerFactory.getLogger(SampleRunner.class);
+
+	private final MappedConfigurationProperties mappedConfigurationProperties;
 
 	@Value("${spring.application.name}")
 	private String applicationName;
@@ -33,5 +38,12 @@ public class SampleRunner implements CommandLineRunner {
 							"has a custom property having the value of '{}' " +
 							"as well as a property getting a default value '{}' ", applicationName, serverPort,
 					customProperty, defaultValueExample);
+
+
+		// Retrieves information from YAML file
+		logger.info("Using yaml, current threadPool value is {}.", mappedConfigurationProperties.getThreadPool());
+		logger.info("Using yaml, current email value is {}.", mappedConfigurationProperties.getEmail());
+		logger.info("Using yaml, current server values are {}.", mappedConfigurationProperties.getServers());
+
 	}
 }

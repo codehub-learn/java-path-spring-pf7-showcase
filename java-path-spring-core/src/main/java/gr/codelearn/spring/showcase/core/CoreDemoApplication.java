@@ -9,11 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:custom.properties")
+@ConfigurationPropertiesScan("gr.codelearn.spring.showcase.core.config")
 public class CoreDemoApplication {
 
 	//remember to perform a clean after adding/changing logging configuration, before executing class

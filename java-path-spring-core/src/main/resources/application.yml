@@ -1,3 +1,9 @@
 spring:
   application:
     name: "Core Demo Application"
+myproperties:
+  threadPool: 40
+  email: example@development.com
+  servers:
+    - www.abc.dev.com
+    - www.xyz.dev.com
