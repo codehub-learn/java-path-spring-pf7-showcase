@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: "Core Demo Application - Profile dev loaded"
+myproperties:
+  threadPool: 10 #this is different from default application.yml relevant value
+  email: example@development.com
+  servers:
+    - www.abc.dev.com
+    - www.xyz.dev.com
+profile:
+  property:
+    example: 10

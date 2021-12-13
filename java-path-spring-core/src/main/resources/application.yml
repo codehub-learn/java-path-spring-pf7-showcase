@@ -1,6 +1,8 @@
 spring:
   application:
     name: "Core Demo Application"
+  profiles:
+    active: dev #ovveride this with java -jar java-path-spring-core\target\java-path-spring-core-2021.1.0.jar --spring.profiles.active=dev
 myproperties:
   threadPool: 40
   email: example@development.com
