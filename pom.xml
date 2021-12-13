@@ -45,6 +45,12 @@
 
 		<!-- Library versions-->
 		<disruptor-maven-plugin.version>3.4.4</disruptor-maven-plugin.version>
+		<!--
+			Bump version due to https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot
+			https://unit42.paloaltonetworks.com/apache-log4j-vulnerability-cve-2021-44228/
+		-->
+		<log4j2.version>2.15.0</log4j2.version>
+
 	</properties>
 
 	<dependencyManagement>
