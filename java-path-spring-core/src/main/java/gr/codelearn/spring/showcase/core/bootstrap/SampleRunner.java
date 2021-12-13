@@ -21,8 +21,13 @@ public class SampleRunner implements CommandLineRunner {
 	@Value("${server.port}")
 	private String serverPort;
 
+	@Value("${custom.property}")
+	private String customProperty;
+
 	@Override
 	public void run(final String... args) throws Exception {
-		logger.info("Application named '{}' is being started at port {}", applicationName, serverPort);
+		logger.info("Application named '{}' is being started at port {} " +
+							"has a custom property having the value of '{}' ", applicationName, serverPort, customProperty);
 	}
+
 }
