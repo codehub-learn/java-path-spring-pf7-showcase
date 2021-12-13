@@ -24,10 +24,14 @@ public class SampleRunner implements CommandLineRunner {
 	@Value("${custom.property}")
 	private String customProperty;
 
+	@Value("${default.example:default}")
+	private String defaultValueExample;
+
 	@Override
 	public void run(final String... args) throws Exception {
 		logger.info("Application named '{}' is being started at port {} " +
-							"has a custom property having the value of '{}' ", applicationName, serverPort, customProperty);
+							"has a custom property having the value of '{}' " +
+							"as well as a property getting a default value '{}' ", applicationName, serverPort,
+					customProperty, defaultValueExample);
 	}
-
 }
