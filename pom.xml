@@ -44,12 +44,12 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Library versions-->
-		<disruptor-maven-plugin.version>3.4.4</disruptor-maven-plugin.version>
 		<!--
 			Bump version due to https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot
 			https://unit42.paloaltonetworks.com/apache-log4j-vulnerability-cve-2021-44228/
 		-->
 		<log4j2.version>2.15.0</log4j2.version>
+		<disruptor-maven-plugin.version>3.4.4</disruptor-maven-plugin.version>
 
 	</properties>
 
@@ -153,6 +153,23 @@
 									<version>${maven.version}</version>
 								</requireMavenVersion>
 							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>ban-bad-log4j-versions</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<bannedDependencies>
+									<excludes>
+										<exclude>org.apache.logging.log4j:log4j-core:(,2.15.0)</exclude>
+									</excludes>
+								</bannedDependencies>
+							</rules>
+							<fail>true</fail>
 						</configuration>
 					</execution>
 				</executions>
