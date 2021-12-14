@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("singleton") // default value
 public class Singleton extends AbstractLogComponent {
-
 	private int value = 0;
 
 	public void increaseValueByOne() {

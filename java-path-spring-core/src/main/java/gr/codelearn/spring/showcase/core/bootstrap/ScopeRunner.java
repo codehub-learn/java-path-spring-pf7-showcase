@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  * application initialization due to implementing ApplicationRunner interface.
  */
 @Component
+@Profile("scope")
 @RequiredArgsConstructor
 public class ScopeRunner extends AbstractLogComponent implements ApplicationRunner {
 	private final ApplicationContext appContext;
