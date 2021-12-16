@@ -5,6 +5,7 @@ import gr.codelearn.spring.showcase.app.domain.BaseModel;
 import gr.codelearn.spring.showcase.app.repository.BaseRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogComponent
@@ -15,6 +16,11 @@ public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogCo
 	public T create(final T clazz) {
 		logger.trace("Creating {}.", clazz);
 		return getRepository().create(clazz);
+	}
+
+	@Override
+	public List<T> createAll(T... entities) {
+		return createAll(Arrays.asList(entities));
 	}
 
 	@Override

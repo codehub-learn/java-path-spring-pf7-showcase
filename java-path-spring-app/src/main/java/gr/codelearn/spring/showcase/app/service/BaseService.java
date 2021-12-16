@@ -5,6 +5,8 @@ import java.util.List;
 public interface BaseService<T, ID> {
 	T create(T clazz);
 
+	List<T> createAll(T... clazzes);
+
 	List<T> createAll(List<T> clazzes);
 
 	void update(T clazz);
