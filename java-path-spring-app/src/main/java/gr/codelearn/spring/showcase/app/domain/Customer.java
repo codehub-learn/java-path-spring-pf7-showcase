@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "CUSTOMERS", indexes = {@Index(columnList = "email")})
-@SequenceGenerator(name = "idGenerator", sequenceName = "CUSTOMERS_SEQ", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "idGenerator", sequenceName = "CUSTOMERS_SEQ", initialValue = 10, allocationSize = 1)
 public class Customer extends BaseModel {
 	@NotNull(message = "Customer's email cannot be null")
 	@Column(length = 50, nullable = false, unique = true)

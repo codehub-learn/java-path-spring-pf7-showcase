@@ -45,12 +45,51 @@ public class DataDemoRunner  extends AbstractLogComponent implements CommandLine
 		logger.info("=============================");
 		logger.info("=============================");
 
+		logger.info("=============================");
+		logger.info("====Finding Customer by Email====");
+		Optional.ofNullable(customerService.findByEmail("chrisperis@gmail.com"))
+				.ifPresent(customer -> logger.info(customer.toString()));
+		logger.info("=============================");
+		logger.info("=============================");
+
 
 		logger.info("=============================");
 		logger.info("====Finding Product by Category ====");
-		Optional.ofNullable(foundCategory).ifPresent( category ->
+		Optional.ofNullable(foundCategory).ifPresent(category ->
 				logger.info(productService.findByCategory(foundCategory).toString()));
 		logger.info("=============================");
 		logger.info("=============================");
+
+		logger.info("=============================");
+		logger.info("====Fetch Lazily orders ====");
+		/*Either of below should throw LazyInitializationException since orderItems aren't fetched eagerly*/
+		/*orderService.get(1L).getOrderItems();
+		orderService.findAll()
+					.forEach(order -> order.getOrderItems()
+										   .forEach(oi -> logger.info(oi.toString())));*/
+		logger.info("=============================");
+		logger.info("=============================");
+
+		orderService.findAllLazy().forEach(order -> order.getOrderItems()
+														 .forEach(oi -> logger.info(oi.toString())));
+
+		logger.info("=============================");
+		logger.info("====Fetch data into custom dto with native query====");
+		logger.info("REPORT: Displaying total number of purchases and corresponding cost per customer category");
+		orderService.findTotalNumberAndCostOfPurchasesPerCustomerCategory().forEach(
+				i -> logger.info("{} was purchased {} times costing in average {}€.", i.getCategory(), i.getPurchases(),
+								 i.getCost()));
+		logger.info("=============================");
+		logger.info("=============================");
+
+		logger.info("=============================");
+		logger.info("====Fetch data into custom dto with native query====");
+		logger.info("REPORT: Displaying total number of purchases and corresponding cost per customer");
+		orderService.findTotalNumberAndTotalCostOfPurchasesPerCustomer().forEach(
+				i -> logger.info("{} purchased {} times paying in total {}€.", i.getCustomerName(), i.getPurchases(),
+								 i.getCost()));
+		logger.info("=============================");
+		logger.info("=============================");
+
 	}
 }

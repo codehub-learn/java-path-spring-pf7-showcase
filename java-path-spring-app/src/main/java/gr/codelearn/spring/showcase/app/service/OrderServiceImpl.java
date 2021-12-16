@@ -6,12 +6,18 @@ import gr.codelearn.spring.showcase.app.domain.OrderItem;
 import gr.codelearn.spring.showcase.app.domain.PaymentMethod;
 import gr.codelearn.spring.showcase.app.domain.Product;
 import gr.codelearn.spring.showcase.app.repository.OrderRepository;
+import gr.codelearn.spring.showcase.app.transfer.KeyValue;
+import gr.codelearn.spring.showcase.app.transfer.PuchasesAndTotalCostPerCustomerDto;
+import gr.codelearn.spring.showcase.app.transfer.PurchasesAndCostPerCustomerCategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -100,6 +106,35 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 		order.setCost(giveDiscounts(order));
 
 		return create(order);
+	}
+
+	@Override
+	public Order getLazy(Long id) {
+		Optional<Order> order = orderRepository.getLazy(id);
+		if (order.isPresent()) {
+			return order.get();
+		}
+		throw new NoSuchElementException(String.format("There was no order found matching id %d.", id));
+	}
+
+	@Override
+	public List<Order> findAllLazy() {
+		return orderRepository.findAllLazy();
+	}
+
+	@Override
+	public List<KeyValue<String, BigDecimal>> findAverageOrderCostPerCustomer() {
+		return orderRepository.findAverageOrderCostPerCustomer();
+	}
+
+	@Override
+	public List<PurchasesAndCostPerCustomerCategoryDto> findTotalNumberAndCostOfPurchasesPerCustomerCategory() {
+		return orderRepository.findTotalNumberAndCostOfPurchasesPerCustomerCategory();
+	}
+
+	@Override
+	public List<PuchasesAndTotalCostPerCustomerDto> findTotalNumberAndTotalCostOfPurchasesPerCustomer() {
+		return orderRepository.findTotalNumberAndTotalCostOfPurchasesPerCustomer();
 	}
 
 	private boolean validate(Order order) {
