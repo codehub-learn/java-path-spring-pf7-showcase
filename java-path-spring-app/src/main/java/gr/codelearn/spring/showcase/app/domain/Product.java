@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "PRODUCTS", indexes = {@Index(columnList = "serial")})
+@Table(name = "PRODUCTS", indexes = {@Index(columnList = "serial"), @Index(columnList = "category_id")})
 @SequenceGenerator(name = "idGenerator", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize = 1)
 public class Product extends BaseModel {
 	@NotNull(message = "Product's serial cannot be null")

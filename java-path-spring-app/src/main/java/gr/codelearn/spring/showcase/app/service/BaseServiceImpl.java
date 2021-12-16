@@ -2,20 +2,20 @@ package gr.codelearn.spring.showcase.app.service;
 
 import gr.codelearn.spring.showcase.app.base.AbstractLogComponent;
 import gr.codelearn.spring.showcase.app.domain.BaseModel;
-import gr.codelearn.spring.showcase.app.repository.BaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogComponent
 		implements BaseService<T, Long> {
-	abstract BaseRepository<T, Long> getRepository();
+	abstract JpaRepository<T, Long> getRepository();
 
 	@Override
-	public T create(final T clazz) {
-		logger.trace("Creating {}.", clazz);
-		return getRepository().create(clazz);
+	public T create(final T entity) {
+		logger.trace("Creating {}.", entity);
+		return getRepository().save(entity);
 	}
 
 	@Override
@@ -24,18 +24,15 @@ public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogCo
 	}
 
 	@Override
-	public List<T> createAll(final List<T> clazzes) {
-		final List<T> updatedEntities = new ArrayList<>();
-		for (final T clazz : clazzes) {
-			updatedEntities.add(create(clazz));
-		}
-		return updatedEntities;
+	public List<T> createAll(final List<T> entities) {
+		logger.debug("Creating {} objects.", entities.size());
+		return getRepository().saveAll(entities);
 	}
 
 	@Override
-	public void update(final T clazz) {
-		logger.trace("Updating {}.", clazz);
-		getRepository().update(clazz);
+	public void update(final T entity) {
+		logger.trace("Updating {}.", entity);
+		getRepository().save(entity);
 	}
 
 	@Override
@@ -46,15 +43,14 @@ public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogCo
 
 	@Override
 	public void deleteById(final Long id) {
-		final T entityFound = getRepository().get(id);
-		logger.trace("Deleting {}.", entityFound);
+		logger.trace("Deleting entity with id {}.", id);
 		getRepository().deleteById(id);
 	}
 
 	@Override
-	public boolean exists(final T clazz) {
-		logger.trace("Checking whether {} exists.", clazz);
-		return getRepository().exists(clazz);
+	public boolean exists(final T entity) {
+		logger.trace("Checking whether {} exists.", entity);
+		return getRepository().existsById(entity.getId());
 	}
 
 	@Override
@@ -65,10 +61,27 @@ public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogCo
 
 	@Override
 	public T find(Long id) {
-		return null;
+		/*
+		 * T findById(ID id) (name in the old API) / Optional<T> findById(ID id) (name in the new API) relies on
+		 * EntityManager.find() that performs an entity eager loading.
+		 *
+		 * T getById(ID id) relies on EntityManager.getReference() that performs an entity lazy loading. So to ensure
+		 * the effective loading of the entity, invoking a method on it is required.
+		 */
+		logger.debug("Find object with id {}.", id);
+		return getRepository().findById(id).orElseThrow(NoSuchElementException::new);
 	}
 
+	@Override
 	public T get(Long id) {
-		return getRepository().get(id);
+		/*
+		 * T findById(ID id) (name in the old API) / Optional<T> findById(ID id) (name in the new API) relies on
+		 * EntityManager.find() that performs an entity eager loading.
+		 *
+		 * T getById(ID id) relies on EntityManager.getReference() that performs an entity lazy loading. So to ensure
+		 * the effective loading of the entity, invoking a method on it is required.
+		 */
+		logger.debug("Get object with id {}.", id);
+		return getRepository().getById(id);
 	}
 }
