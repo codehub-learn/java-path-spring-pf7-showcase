@@ -18,7 +18,6 @@ import java.io.Serializable;
 @MappedSuperclass
 public class BaseModel implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idGenerator")
 	private Long id;
