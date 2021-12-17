@@ -30,7 +30,7 @@ public class GenerateOrderRunner extends AbstractLogComponent implements Command
 		orderService.addItem(firstOrder, productService.findBySerial("SN1000-0001"), 2);
 		orderService.addItem(firstOrder, productService.findBySerial("SN1100-0001"), 1);
 		orderService.addItem(firstOrder, productService.findBySerial("SN1000-0004"), 1);
-		orderService.addItem(firstOrder, productService.findBySerial("SN1000-0008"), 1);
+		orderService.addItem(firstOrder, productService.findBySerial("SN1500-0001"), 1);
 		// Update item(s)
 		orderService.addItem(firstOrder, productService.findBySerial("SN1000-0001"), 1);
 		orderService.updateItem(firstOrder, productService.findBySerial("SN1000-0004"), 2);

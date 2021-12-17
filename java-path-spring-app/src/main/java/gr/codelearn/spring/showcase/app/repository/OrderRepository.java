@@ -10,12 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Query("select o from Order o join fetch o.orderItems where o.id = ?1")
-	Optional<Order> getLazy(Long id);
+	Order findLazy(Long id);
 
 	@Query("select distinct o from Order o join fetch o.orderItems")
 	List<Order> findAllLazy();
@@ -30,4 +29,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Query(nativeQuery = true)
 	List<PuchasesAndTotalCostPerCustomerDto> findTotalNumberAndTotalCostOfPurchasesPerCustomer();
 
+	@Query(value = "select top 1 * from ORDERS o, customers c where o.customer_id = c.id order by o.cost desc", nativeQuery = true)
+	Order findMostExpensiveOrder();
 }

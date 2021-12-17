@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
@@ -17,28 +18,28 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "PRODUCTS", indexes = {@Index(columnList = "serial"), @Index(columnList = "category_id")})
-@SequenceGenerator(name = "idGenerator", sequenceName = "PRODUCTS_SEQ", initialValue = 10, allocationSize = 1)
+@Table(name = "PRODUCTS", indexes = {@Index(columnList = "serial")})
+@SequenceGenerator(name = "idGenerator", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize = 1)
 public class Product extends BaseModel {
-	@NotNull(message = "Product's serial cannot be null")
+	@NotNull
 	@Column(length = 30, nullable = false, unique = true)
 	private String serial;
 
-	@NotNull(message = "Product's name cannot be null")
+	@NotNull
 	@Column(length = 50, nullable = false)
 	private String name;
 
-	@NotNull(message = "Product's price cannot be null")
+	@NotNull
 	@Column(precision = 10, scale = 2, nullable = false)
 	private BigDecimal price;
 
-	@NotNull(message = "Product's category cannot be null")
-	@ManyToOne
+	@NotNull
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Category category;
 }

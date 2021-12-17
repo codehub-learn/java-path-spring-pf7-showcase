@@ -1,7 +1,7 @@
 package gr.codelearn.spring.showcase.app.domain;
 
 public enum CustomerCategory {
-	INDIVIDUAL(0.1f), BUSINESS(0.2f), GOVERNMENT(0.5f);
+	INDIVIDUAL(0), BUSINESS(0.2f), GOVERNMENT(0.5f);
 
 	private final float discount;
 

@@ -5,7 +5,6 @@ import gr.codelearn.spring.showcase.app.domain.Order;
 import gr.codelearn.spring.showcase.app.domain.PaymentMethod;
 import gr.codelearn.spring.showcase.app.domain.Product;
 import gr.codelearn.spring.showcase.app.transfer.KeyValue;
-import gr.codelearn.spring.showcase.app.transfer.PuchasesAndTotalCostPerCustomerDto;
 import gr.codelearn.spring.showcase.app.transfer.PurchasesAndCostPerCustomerCategoryDto;
 
 import java.math.BigDecimal;
@@ -22,17 +21,14 @@ public interface OrderService extends BaseService<Order, Long> {
 
 	Order checkout(Order order, PaymentMethod paymentMethod);
 
-	Order getLazy(Long id);
-
-	List<Order> findAll();
+	Order findLazy(Long id);
 
 	List<Order> findAllLazy();
 
 	List<KeyValue<String, BigDecimal>> findAverageOrderCostPerCustomer();
 
+	Order findMostExpensiveOrder();
+
 	List<PurchasesAndCostPerCustomerCategoryDto> findTotalNumberAndCostOfPurchasesPerCustomerCategory();
-
-	List<PuchasesAndTotalCostPerCustomerDto> findTotalNumberAndTotalCostOfPurchasesPerCustomer();
-
 
 }

@@ -6,22 +6,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl extends BaseServiceImpl<Customer> implements CustomerService {
 	private final CustomerRepository customerRepository;
 
 	@Override
-	JpaRepository<Customer, Long> getRepository() {
+	public JpaRepository<Customer, Long> getRepository() {
 		return customerRepository;
 	}
 
 	@Override
 	public Customer findByEmail(final String email) {
-		return Optional.ofNullable(customerRepository.findByEmail(email)).orElseThrow(
-				NoSuchElementException::new);
+		return customerRepository.findAll().stream().filter(c -> c.getEmail().equals(email)).findAny().orElse(null);
 	}
 }

@@ -3,54 +3,68 @@ package gr.codelearn.spring.showcase.app.service;
 import gr.codelearn.spring.showcase.app.base.AbstractLogComponent;
 import gr.codelearn.spring.showcase.app.domain.BaseModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogComponent
 		implements BaseService<T, Long> {
-	abstract JpaRepository<T, Long> getRepository();
+	public abstract JpaRepository<T, Long> getRepository();
 
 	@Override
-	public T create(final T entity) {
-		logger.trace("Creating {}.", entity);
-		return getRepository().save(entity);
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+	public List<T> createAll(final T... clazzes) {
+		return createAll(Arrays.asList(clazzes));
 	}
 
 	@Override
-	public List<T> createAll(T... entities) {
-		return createAll(Arrays.asList(entities));
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+	public List<T> createAll(final List<T> clazzes) {
+		final List<T> updatedEntities = new ArrayList<>();
+		for (final T clazz : clazzes) {
+			updatedEntities.add(create(clazz));
+		}
+		return updatedEntities;
 	}
 
 	@Override
-	public List<T> createAll(final List<T> entities) {
-		logger.debug("Creating {} objects.", entities.size());
-		return getRepository().saveAll(entities);
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+	public T create(final T clazz) {
+		logger.trace("Creating {}.", clazz);
+		return getRepository().save(clazz);
 	}
 
 	@Override
-	public void update(final T entity) {
-		logger.trace("Updating {}.", entity);
-		getRepository().save(entity);
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+	public void update(final T clazz) {
+		logger.trace("Updating {}.", clazz);
+		getRepository().save(clazz);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 	public void delete(final T clazz) {
 		logger.trace("Deleting {}.", clazz);
 		getRepository().delete(clazz);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 	public void deleteById(final Long id) {
-		logger.trace("Deleting entity with id {}.", id);
+		final T entityFound = getRepository().getById(id);
+		logger.trace("Deleting {}.", entityFound);
 		getRepository().deleteById(id);
 	}
 
 	@Override
-	public boolean exists(final T entity) {
-		logger.trace("Checking whether {} exists.", entity);
-		return getRepository().existsById(entity.getId());
+	public boolean exists(final T clazz) {
+		logger.trace("Checking whether {} exists.", clazz);
+		return getRepository().existsById(clazz.getId());
 	}
 
 	@Override
@@ -61,27 +75,6 @@ public abstract class BaseServiceImpl<T extends BaseModel> extends AbstractLogCo
 
 	@Override
 	public T find(Long id) {
-		/*
-		 * T findById(ID id) (name in the old API) / Optional<T> findById(ID id) (name in the new API) relies on
-		 * EntityManager.find() that performs an entity eager loading.
-		 *
-		 * T getById(ID id) relies on EntityManager.getReference() that performs an entity lazy loading. So to ensure
-		 * the effective loading of the entity, invoking a method on it is required.
-		 */
-		logger.debug("Find object with id {}.", id);
 		return getRepository().findById(id).orElseThrow(NoSuchElementException::new);
-	}
-
-	@Override
-	public T get(Long id) {
-		/*
-		 * T findById(ID id) (name in the old API) / Optional<T> findById(ID id) (name in the new API) relies on
-		 * EntityManager.find() that performs an entity eager loading.
-		 *
-		 * T getById(ID id) relies on EntityManager.getReference() that performs an entity lazy loading. So to ensure
-		 * the effective loading of the entity, invoking a method on it is required.
-		 */
-		logger.debug("Get object with id {}.", id);
-		return getRepository().getById(id);
 	}
 }

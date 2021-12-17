@@ -7,7 +7,6 @@ import gr.codelearn.spring.showcase.app.domain.PaymentMethod;
 import gr.codelearn.spring.showcase.app.domain.Product;
 import gr.codelearn.spring.showcase.app.repository.OrderRepository;
 import gr.codelearn.spring.showcase.app.transfer.KeyValue;
-import gr.codelearn.spring.showcase.app.transfer.PuchasesAndTotalCostPerCustomerDto;
 import gr.codelearn.spring.showcase.app.transfer.PurchasesAndCostPerCustomerCategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 	private final OrderRepository orderRepository;
 
 	@Override
-	JpaRepository<Order, Long> getRepository() {
+	public JpaRepository<Order, Long> getRepository() {
 		return orderRepository;
 	}
 
@@ -52,7 +49,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 		}
 
 		if (!increasedQuantity) {
-			order.getOrderItems().add(newOrderItem(product, quantity));
+			order.getOrderItems().add(newOrderItem(order, product, quantity));
 		}
 
 		logger.debug("Product[{}] added to Order[{}]", product, order);
@@ -77,7 +74,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 		}
 
 		order.getOrderItems().removeIf(oi -> oi.getProduct().getSerial().equals(product.getSerial()));
-		order.getOrderItems().add(newOrderItem(product, quantity));
+		order.getOrderItems().add(newOrderItem(order, product, quantity));
 
 		logger.debug("Product[{}] updated in Order[{}]", product, order);
 	}
@@ -108,41 +105,12 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 		return create(order);
 	}
 
-	@Override
-	public Order getLazy(Long id) {
-		Optional<Order> order = orderRepository.getLazy(id);
-		if (order.isPresent()) {
-			return order.get();
-		}
-		throw new NoSuchElementException(String.format("There was no order found matching id %d.", id));
-	}
-
-	@Override
-	public List<Order> findAllLazy() {
-		return orderRepository.findAllLazy();
-	}
-
-	@Override
-	public List<KeyValue<String, BigDecimal>> findAverageOrderCostPerCustomer() {
-		return orderRepository.findAverageOrderCostPerCustomer();
-	}
-
-	@Override
-	public List<PurchasesAndCostPerCustomerCategoryDto> findTotalNumberAndCostOfPurchasesPerCustomerCategory() {
-		return orderRepository.findTotalNumberAndCostOfPurchasesPerCustomerCategory();
-	}
-
-	@Override
-	public List<PuchasesAndTotalCostPerCustomerDto> findTotalNumberAndTotalCostOfPurchasesPerCustomer() {
-		return orderRepository.findTotalNumberAndTotalCostOfPurchasesPerCustomer();
-	}
-
 	private boolean validate(Order order) {
 		return order != null && !order.getOrderItems().isEmpty() && order.getCustomer() != null;
 	}
 
-	private OrderItem newOrderItem(Product product, int quantity) {
-		return OrderItem.builder().product(product).quantity(quantity).price(product.getPrice()).build();
+	private OrderItem newOrderItem(Order order, Product product, int quantity) {
+		return OrderItem.builder().product(product).order(order).quantity(quantity).price(product.getPrice()).build();
 	}
 
 	private BigDecimal giveDiscounts(Order order) {
@@ -163,5 +131,30 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 					 totalDiscount, finalCost);
 
 		return finalCost;
+	}
+
+	@Override
+	public Order findLazy(Long id) {
+		return orderRepository.findLazy(id);
+	}
+
+	@Override
+	public List<Order> findAllLazy() {
+		return orderRepository.findAllLazy();
+	}
+
+	@Override
+	public List<KeyValue<String, BigDecimal>> findAverageOrderCostPerCustomer() {
+		return orderRepository.findAverageOrderCostPerCustomer();
+	}
+
+	@Override
+	public Order findMostExpensiveOrder() {
+		return orderRepository.findMostExpensiveOrder();
+	}
+
+	@Override
+	public List<PurchasesAndCostPerCustomerCategoryDto> findTotalNumberAndCostOfPurchasesPerCustomerCategory() {
+		return orderRepository.findTotalNumberAndCostOfPurchasesPerCustomerCategory();
 	}
 }

@@ -5,9 +5,9 @@ import java.util.List;
 public interface BaseService<T, ID> {
 	T create(T clazz);
 
-	List<T> createAll(T... clazzes);
-
 	List<T> createAll(List<T> clazzes);
+
+	List<T> createAll(T... clazzes);
 
 	void update(T clazz);
 
@@ -17,9 +17,7 @@ public interface BaseService<T, ID> {
 
 	boolean exists(T clazz);
 
+	T find(ID id);
+
 	List<T> findAll();
-
-	T find(Long id);
-
-	T get(ID id);
 }
