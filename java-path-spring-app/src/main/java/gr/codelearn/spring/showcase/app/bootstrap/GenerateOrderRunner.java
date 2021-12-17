@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("generate-order")
+@Profile("generate-orders")
 @RequiredArgsConstructor
 public class GenerateOrderRunner extends AbstractLogComponent implements CommandLineRunner {
 	private final ProductService productService;
