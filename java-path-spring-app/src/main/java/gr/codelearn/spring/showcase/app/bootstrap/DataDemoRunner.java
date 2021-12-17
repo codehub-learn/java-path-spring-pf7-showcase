@@ -7,18 +7,16 @@ import gr.codelearn.spring.showcase.app.service.CustomerService;
 import gr.codelearn.spring.showcase.app.service.OrderService;
 import gr.codelearn.spring.showcase.app.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@Profile("data-demo")
 @RequiredArgsConstructor
-public class DataDemoRunner  extends AbstractLogComponent implements CommandLineRunner {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
-
+public class DataDemoRunner extends AbstractLogComponent implements CommandLineRunner {
 	private final CategoryService categoryService;
 	private final CustomerService customerService;
 	private final OrderService orderService;
@@ -47,16 +45,15 @@ public class DataDemoRunner  extends AbstractLogComponent implements CommandLine
 
 		logger.info("=============================");
 		logger.info("====Finding Customer by Email====");
-		Optional.ofNullable(customerService.findByEmail("chrisperis@gmail.com"))
-				.ifPresent(customer -> logger.info(customer.toString()));
+		Optional.ofNullable(customerService.findByEmail("chrisperis@gmail.com")).ifPresent(
+				customer -> logger.info(customer.toString()));
 		logger.info("=============================");
 		logger.info("=============================");
-
 
 		logger.info("=============================");
 		logger.info("====Finding Product by Category ====");
-		Optional.ofNullable(foundCategory).ifPresent(category ->
-				logger.info(productService.findByCategory(foundCategory).toString()));
+		Optional.ofNullable(foundCategory).ifPresent(
+				category -> logger.info(productService.findByCategory(foundCategory).toString()));
 		logger.info("=============================");
 		logger.info("=============================");
 
@@ -70,8 +67,7 @@ public class DataDemoRunner  extends AbstractLogComponent implements CommandLine
 		logger.info("=============================");
 		logger.info("=============================");
 
-		orderService.findAllLazy().forEach(order -> order.getOrderItems()
-														 .forEach(oi -> logger.info(oi.toString())));
+		orderService.findAllLazy().forEach(order -> order.getOrderItems().forEach(oi -> logger.info(oi.toString())));
 
 		logger.info("=============================");
 		logger.info("====Fetch data into custom dto with native query====");
