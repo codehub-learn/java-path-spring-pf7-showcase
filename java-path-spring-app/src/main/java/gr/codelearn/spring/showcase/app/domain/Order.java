@@ -1,5 +1,7 @@
 package gr.codelearn.spring.showcase.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,10 +29,12 @@ public class Order extends BaseModel {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private Customer customer;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss.SSS")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date submitDate;
 
+	@JsonManagedReference("orderItems")
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

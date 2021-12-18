@@ -1,5 +1,6 @@
 package gr.codelearn.spring.showcase.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -79,7 +79,7 @@
 			<AppenderRef ref="ConsoleAppender"/>
 			<AppenderRef ref="DataAppender"/>
 		</AsyncLogger>
-		<AsyncLogger name="org.hibernate.SQL" level="trace" additivity="false">
+		<AsyncLogger name="org.hibernate.SQL" level="debug" additivity="false">
 			<AppenderRef ref="ConsoleAppender"/>
 			<AppenderRef ref="DataAppender"/>
 		</AsyncLogger>

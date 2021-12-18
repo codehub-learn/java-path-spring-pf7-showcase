@@ -1,5 +1,6 @@
 package gr.codelearn.spring.showcase.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import gr.codelearn.spring.showcase.app.transfer.KeyValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +38,7 @@ import javax.validation.constraints.Size;
 )
 //@formatter:on
 
+@JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

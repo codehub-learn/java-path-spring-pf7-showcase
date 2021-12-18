@@ -134,8 +134,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 	}
 
 	@Override
+	public Order find(Long id) {
+		return findLazy(id);
+	}
+
+	@Override
 	public Order findLazy(Long id) {
 		return orderRepository.findLazy(id);
+	}
+
+	@Override
+	public List<Order> findAll() {
+		return findAllLazy();
 	}
 
 	@Override
