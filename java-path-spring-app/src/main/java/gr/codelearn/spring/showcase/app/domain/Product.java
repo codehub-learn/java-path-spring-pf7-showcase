@@ -1,5 +1,7 @@
 package gr.codelearn.spring.showcase.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +30,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "PRODUCTS", indexes = {@Index(columnList = "serial")})
 @SequenceGenerator(name = "idGenerator", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize = 1)
+@JsonFilter("product_filter")
 public class Product extends BaseModel {
 	@NotNull
 	@Column(length = 30, nullable = false, unique = true)
@@ -39,6 +42,7 @@ public class Product extends BaseModel {
 
 	@NotNull
 	@Column(precision = 10, scale = 2, nullable = false)
+	@JsonIgnore
 	private BigDecimal price;
 
 	@NotNull
