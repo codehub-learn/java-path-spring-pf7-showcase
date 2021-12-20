@@ -13,8 +13,12 @@ import gr.codelearn.spring.showcase.app.transfer.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,17 +31,26 @@ public class ProductController extends AbstractController<Product> {
 		return productService;
 	}
 
+	@GetMapping(path = "/{pId}/support/{sId}", params = {"x=10", "y=100"})
+	public ResponseEntity<ApiResponse<String>> mappingExample(
+			@PathVariable(value = "sId", required = false) String supportId, @PathVariable("pId") Long productId,
+			@RequestParam("value") String value, HttpServletRequest request) {
+		return ResponseEntity.ok(
+				ApiResponse.<String>builder().data(productId.toString() + "->" + supportId + "->" + value).build());
+	}
+
 	@GetMapping(headers = "filtered")
 	public ResponseEntity<ApiResponse<JsonNode>> filteredProduct() {
 		Product product = getBaseService().findAll().get(0);
-		return ResponseEntity.ok(ApiResponse.<JsonNode>builder().data(filterProducts(product, "price", "serial")).build());
+		return ResponseEntity.ok(
+				ApiResponse.<JsonNode>builder().data(filterProducts(product, "price", "serial")).build());
 	}
 
-	private JsonNode filterProducts(Product product, String... excludedFields){
+	private JsonNode filterProducts(Product product, String... excludedFields) {
 		SimpleFilterProvider simpleFilterProvider = new SimpleFilterProvider();
 		SimpleFilterProvider filters = simpleFilterProvider.addFilter("product_filter",
-																					SimpleBeanPropertyFilter.serializeAllExcept(
-																							excludedFields));
+																	  SimpleBeanPropertyFilter.serializeAllExcept(
+																			  excludedFields));
 
 		// Local object mapper that will convert our product to a string based on the given filter
 		ObjectMapper mapper = new ObjectMapper();
