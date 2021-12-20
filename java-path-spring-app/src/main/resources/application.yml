@@ -61,3 +61,5 @@ spring:
       # .sql) and DML (data.sql) scripts.
       mode: EMBEDDED
       platform: h2
+  cache:
+    cache-names: catalog

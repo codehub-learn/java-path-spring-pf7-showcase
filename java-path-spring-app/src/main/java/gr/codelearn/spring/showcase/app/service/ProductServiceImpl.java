@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"products"}, keyGenerator = "john")
+@CacheConfig(cacheNames = "catalog", keyGenerator = "customCacheKeyGenerator")
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService {
 	private final ProductRepository productRepository;
 
@@ -36,7 +36,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
 		return productRepository.findAll();
 	}
 
-	@CacheEvict(value = "products", allEntries = true)
+	@CacheEvict(value = "catalog", allEntries = true)
 	@Scheduled(cron = "0 0/5 * * * ?")
 	public void clearCaches() {
 
